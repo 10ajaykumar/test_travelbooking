@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#1e3a8a" />
+    <meta name="description" content="TravelBooking — Book flights and hotels at the best prices worldwide" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['Plus Jakarta Sans', 'Inter', 'sans-serif'],
+            },
+            colors: {
+              brand: {
+                50:  '#eef2ff',
+                100: '#e0e7ff',
+                200: '#c7d2fe',
+                300: '#a5b4fc',
+                400: '#818cf8',
+                500: '#6366f1',
+                600: '#4f46e5',
+                700: '#4338ca',
+                800: '#3730a3',
+                900: '#312e81',
+              },
+              sky: {
+                50:  '#f0f9ff',
+                100: '#e0f2fe',
+                200: '#bae6fd',
+                300: '#7dd3fc',
+                400: '#38bdf8',
+                500: '#0ea5e9',
+                600: '#0284c7',
+                700: '#0369a1',
+                800: '#075985',
+                900: '#0c4a6e',
+              },
+            },
+            backdropBlur: {
+              xs: '2px',
+            },
+          },
+        },
+      };
+    </script>
+    <title>TravelBooking — Your Journey Starts Here</title>
+    <style>
+      /* ─── Keyframe Animations ─── */
+      @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(28px); }
+        to   { opacity: 1; transform: translateY(0);    }
+      }
+      @keyframes fadeIn {
+        from { opacity: 0; }
+        to   { opacity: 1; }
+      }
+      @keyframes slideInLeft {
+        from { opacity: 0; transform: translateX(-32px); }
+        to   { opacity: 1; transform: translateX(0);     }
+      }
+      @keyframes slideInRight {
+        from { opacity: 0; transform: translateX(32px); }
+        to   { opacity: 1; transform: translateX(0);    }
+      }
+      @keyframes scaleIn {
+        from { opacity: 0; transform: scale(0.93); }
+        to   { opacity: 1; transform: scale(1);    }
+      }
+      @keyframes float {
+        0%, 100% { transform: translateY(0px) rotate(0deg); }
+        33%       { transform: translateY(-8px) rotate(1deg); }
+        66%       { transform: translateY(-4px) rotate(-1deg); }
+      }
+      @keyframes floatSlow {
+        0%, 100% { transform: translateY(0px); }
+        50%       { transform: translateY(-14px); }
+      }
+      @keyframes shimmer {
+        0%   { background-position: -400px 0; }
+        100% { background-position: 400px 0;  }
+      }
+      @keyframes planeFly {
+        0%   { transform: translateX(-60px) translateY(10px) rotate(-5deg); opacity: 0; }
+        20%  { opacity: 1; }
+        80%  { opacity: 1; }
+        100% { transform: translateX(60px) translateY(-10px) rotate(-5deg);  opacity: 0; }
+      }
+      @keyframes ripple {
+        0%   { transform: scale(1);    opacity: 0.6; }
+        100% { transform: scale(2.2);  opacity: 0;   }
+      }
+      @keyframes gradientShift {
+        0%   { background-position: 0% 50%;   }
+        50%  { background-position: 100% 50%; }
+        100% { background-position: 0% 50%;   }
+      }
+      @keyframes blink {
+        0%, 100% { opacity: 1; }
+        50%       { opacity: 0; }
+      }
+      @keyframes spin {
+        from { transform: rotate(0deg);   }
+        to   { transform: rotate(360deg); }
+      }
+      @keyframes bounceIn {
+        0%   { transform: scale(0.3);  opacity: 0; }
+        50%  { transform: scale(1.05); opacity: 0.8; }
+        70%  { transform: scale(0.9);  opacity: 0.9; }
+        100% { transform: scale(1);    opacity: 1; }
+      }
+
+      /* ─── Animation Utility Classes ─── */
+      .anim-fade-up           { animation: fadeInUp 0.55s cubic-bezier(0.22,1,0.36,1) both; }
+      .anim-fade-in           { animation: fadeIn 0.4s ease-out both; }
+      .anim-slide-left        { animation: slideInLeft 0.5s cubic-bezier(0.22,1,0.36,1) both; }
+      .anim-slide-right       { animation: slideInRight 0.5s cubic-bezier(0.22,1,0.36,1) both; }
+      .anim-scale-in          { animation: scaleIn 0.4s cubic-bezier(0.22,1,0.36,1) both; }
+      .anim-float             { animation: float 4s ease-in-out infinite; }
+      .anim-float-slow        { animation: floatSlow 6s ease-in-out infinite; }
+      .anim-bounce-in         { animation: bounceIn 0.6s cubic-bezier(0.22,1,0.36,1) both; }
+
+      /* ─── Stagger Delays ─── */
+      .delay-0   { animation-delay: 0ms;   }
+      .delay-100 { animation-delay: 100ms; }
+      .delay-200 { animation-delay: 200ms; }
+      .delay-300 { animation-delay: 300ms; }
+      .delay-400 { animation-delay: 400ms; }
+      .delay-500 { animation-delay: 500ms; }
+      .delay-600 { animation-delay: 600ms; }
+      .delay-700 { animation-delay: 700ms; }
+      .delay-800 { animation-delay: 800ms; }
+
+      /* ─── Shimmer Skeleton ─── */
+      .shimmer {
+        background: linear-gradient(90deg, #f0f0f0 25%, #e8e8e8 50%, #f0f0f0 75%);
+        background-size: 400px 100%;
+        animation: shimmer 1.4s ease-in-out infinite;
+      }
+
+      /* ─── Animated Gradient Background ─── */
+      .gradient-animated {
+        background: linear-gradient(135deg, #1e3a8a, #312e81, #0c4a6e, #1e3a8a);
+        background-size: 300% 300%;
+        animation: gradientShift 8s ease infinite;
+      }
+
+      /* ─── Glass Morphism ─── */
+      .glass {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.18);
+      }
+      .glass-dark {
+        background: rgba(0, 0, 0, 0.25);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+      }
+
+      /* ─── Card Hover Lift ─── */
+      .card-hover {
+        transition: transform 0.25s cubic-bezier(0.22,1,0.36,1),
+                    box-shadow 0.25s cubic-bezier(0.22,1,0.36,1);
+      }
+      .card-hover:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.12);
+      }
+
+      /* ─── Gradient Text ─── */
+      .text-gradient {
+        background: linear-gradient(135deg, #60a5fa, #a78bfa);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+      .text-gradient-gold {
+        background: linear-gradient(135deg, #fbbf24, #f59e0b, #d97706);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      /* ─── Ripple Button ─── */
+      .btn-ripple {
+        position: relative;
+        overflow: hidden;
+      }
+      .btn-ripple::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: rgba(255,255,255,0.15);
+        border-radius: inherit;
+        opacity: 0;
+        transition: opacity 0.3s;
+      }
+      .btn-ripple:hover::after { opacity: 1; }
+      .btn-ripple:active::after { opacity: 0.3; }
+
+      /* ─── Input Focus Glow ─── */
+      .input-glow:focus {
+        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+        border-color: #6366f1;
+        outline: none;
+      }
+      .input-glow-error:focus {
+        box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2);
+        border-color: #ef4444;
+        outline: none;
+      }
+
+      /* ─── Scrollbar Styling ─── */
+      ::-webkit-scrollbar { width: 6px; height: 6px; }
+      ::-webkit-scrollbar-track { background: #f1f5f9; }
+      ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+      ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+      /* ─── Flight Route Line ─── */
+      .route-line {
+        background: linear-gradient(90deg, transparent, #6366f1, transparent);
+        height: 1px;
+      }
+
+      /* ─── Status Badges ─── */
+      .badge-confirmed { background: #dcfce7; color: #15803d; }
+      .badge-pending   { background: #fef9c3; color: #854d0e; }
+      .badge-cancelled { background: #fee2e2; color: #b91c1c; }
+      .badge-completed { background: #dbeafe; color: #1d4ed8; }
+
+      /* ─── Plane fly animation on hover ─── */
+      .plane-fly { transition: transform 0.4s cubic-bezier(0.22,1,0.36,1); }
+      .plane-fly:hover { transform: translateX(4px) translateY(-4px) rotate(-5deg); }
+
+      /* ─── Progress steps ─── */
+      .step-active   { background: #4f46e5; color: white; }
+      .step-done     { background: #10b981; color: white; }
+      .step-inactive { background: #e2e8f0; color: #94a3b8; }
+    </style>
+  </head>
+  <body class="font-sans bg-slate-50 antialiased">
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+  </body>
+</html>
