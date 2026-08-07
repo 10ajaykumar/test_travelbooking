@@ -1,0 +1,169 @@
+// Helper function to evaluate target namespace and label based on branch name
+def getTargetNamespace() {
+    if (env.BRANCH_NAME == 'main' || env.BRANCH_NAME == 'master') {
+        return 'prod-jenkins-agents'
+    } else {
+        return 'staging-jenkins-agents'
+    }
+}
+
+// Store evaluated namespace in a script variable
+def agentNamespace = getTargetNamespace()
+
+pipeline {
+    agent {
+        kubernetes {
+            // Evaluates dynamically to 'prod-jenkins-agents' or 'staging-jenkins-agents'
+            namespace "${agentNamespace}"
+            yaml """
+              apiVersion: v1
+              kind: Pod
+              metadata:
+                labels:
+                  app: travel-booking-agent
+              spec:
+                containers:
+                  - name: jnlp
+                    image: jenkins/inbound-agent:latest
+                    workingDir: /home/jenkins
+
+                  - name: kaniko
+                    image: gcr.io/kaniko-project/executor:debug
+                    imagePullPolicy: IfNotPresent
+                    workingDir: /home/jenkins
+                    command:
+                      - /busybox/cat
+                    tty: true
+
+                  - name: nodejs
+                    image: node:20.10.0
+                    imagePullPolicy: IfNotPresent
+                    workingDir: /home/jenkins
+                    command:
+                      - cat
+                    tty: true
+
+                  - name: golang
+                    image: golang:1.21
+                    imagePullPolicy: IfNotPresent
+                    workingDir: /home/jenkins
+                    command:
+                      - cat
+                    tty: true
+
+                  - name: docker
+                    image: docker:20.10.24-dind
+                    imagePullPolicy: IfNotPresent
+                    workingDir: /home/jenkins
+                    command:
+                      - cat
+                    tty: true
+                    securityContext:
+                      privileged: true
+                    volumeMounts:
+                      - name: dockersock
+                        mountPath: /var/run/docker.sock
+
+                  - name: helm
+                    image: alpine/helm:3.14.0
+                    imagePullPolicy: IfNotPresent
+                    workingDir: /home/jenkins
+                    command:
+                      - cat
+                    tty: true
+
+                  - name: gcloud
+                    image: google/cloud-sdk:slim
+                    imagePullPolicy: IfNotPresent
+                    workingDir: /home/jenkins
+                    command:
+                      - cat
+                    tty: true
+
+                volumes:
+                  - name: dockersock
+                    hostPath:
+                      path: /var/run/docker.sock
+              """
+        }
+    }
+
+
+    options {
+        disableConcurrentBuilds()
+        timeout(time: 60, unit: 'MINUTES')
+        buildDiscarder(logRotator(numToKeepStr: '5'))
+    }
+
+
+    environment {
+
+        APP_REPO = "https://github.com/10ajaykumar/test_travelbooking.git"
+        GIT_CREDENTIALS = "github-creds"
+
+        AWS_DEFAULT_REGION = 'us-east-1'
+        AWS_ACCOUNT_ID     = '041124309752'
+        SCANNER_HOME       = tool 'sonar-scanner'
+        FRONTEND_ECR_URI = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/frontend-repo"
+        BACKEND_ECR_URI  = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/backend-repo"
+    }
+
+
+    stages {
+        stage('Verify Dynamic Namespace') {
+            steps {
+                script {
+                    echo "=================================================="
+                    echo "Current Git Branch      : ${env.BRANCH_NAME}"
+                    echo "Target Namespace Variable: ${agentNamespace}"
+                    echo "=================================================="
+                    
+                    // Verify the pod's actual namespace from inside the container
+                    sh '''
+                        echo -n "Actual Running Namespace in K8s: "
+                        cat /var/run/secrets/kubernetes.io/serviceaccount/namespace
+                        echo ""
+                    '''
+                }
+            }
+        }
+
+        stage('Clean Workspace') {
+        
+            steps {
+                script { currentBuild.description = "Clean Workspace" }
+                
+                cleanWs(deleteDirs: true)
+            }
+        }
+
+
+        stage('Pipeline Information') {
+            steps {
+                script {
+
+                    echo "======================================="
+                    echo "Branch     : ${env.BRANCH_NAME}"
+                    echo "Namespace  : ${agentNamespace}"
+                    echo "Repo       : ${APP_REPO}"
+                    echo "======================================="
+
+                }
+            }
+        }
+
+        stage('Checkout Application') {
+            steps {
+                dir("application") {
+                    git(
+                        branch: "${env.BRANCH_NAME}",
+                        credentialsId: "${GIT_CREDENTIALS}",
+                        url: "${APP_REPO}"
+                    )
+                }
+            }
+        }
+
+    }
+
+}

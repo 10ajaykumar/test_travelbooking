@@ -1,0 +1,31 @@
+services:
+
+  - name: frontend
+    path: frontend
+    language: nodejs
+    ecrRepo: frontend-repo
+
+  - name: booking-service
+    path: booking-service
+    language: golang
+    ecrRepo: booking-service-repo
+
+  - name: notification-service
+    path: notification-service
+    language: java
+    ecrRepo: notification-service-repo
+
+  - name: payment-service
+    path: payment-service
+    language: java
+    ecrRepo: payment-service-repo
+
+  - name: search-service
+    path: search-service
+    language: java
+    ecrRepo: search-service-repo
+
+  - name: user-service
+    path: user-service
+    language: java
+    ecrRepo: user-service-repo
