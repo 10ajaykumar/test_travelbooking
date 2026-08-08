@@ -1,0 +1,31 @@
+# Environment approval notification lists
+approval:
+  dev:
+    - 1010ajaykumar10@gmail.com 
+  staging:
+    - 1010ajaykumar10@gmail.com
+  prod:
+    - ajaykumar.b@kaveriseeds.in
+
+# Stage-specific failure notification lists
+# Keys MUST match the exact stage names in your Jenkinsfile
+stage_owners:
+  "Clean Workspace":
+    - 1010ajaykumar10@gmail.com
+  "Checkout":
+    - 1010ajaykumar10@gmail.com
+  "Determine Environment & Config":
+    - 1010ajaykumar10@gmail.com
+  "Detect Changed Services":
+    - 1010ajaykumar10@gmail.com
+  "Security Scans":
+    - ajaykumar.b@gmail.com
+  "Build & Push Images":
+    - 1010ajaykumar10@gmail.com
+  "Trivy Image Scan":
+    - ajaykumar.b@gmail.com
+    - 1010ajaykumar10@gmail.com
+  "Deployment Approval":
+    - ajaykumar.b@gmail.com
+  "Update Helm Values (GitOps)":
+    - 1010ajaykumar10@gmail.com
