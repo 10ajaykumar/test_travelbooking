@@ -1,8 +1,0 @@
-secrets:
-  enabled: false
-
-postgres:
-  enabled: false
-
-redis:
-  enabled: false
