@@ -1,0 +1,13 @@
+gateway:
+  gatewayClassName: localhost-eg
+  annotations: {}
+  listeners:
+    - name: http
+      port: 80
+      protocol: HTTP
+      hostname: ""
+      allowedRoutes:
+        namespaces:
+          from: Same
+httpRoutes:
+  enabled: true

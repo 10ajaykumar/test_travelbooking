@@ -1,0 +1,147 @@
+replicaCount: 1
+revisionHistoryLimit: 5
+
+image:
+  repository: 041124309752.dkr.ecr.us-east-1.amazonaws.com/travel-booking-user-service
+  tag: "replace-me"
+  pullPolicy: IfNotPresent
+
+imagePullSecrets: []
+containerPort: 3001
+
+service:
+  type: ClusterIP
+  port: 3001
+  targetPort: 3001
+  annotations: {}
+
+serviceAccount:
+  create: true
+  name: ""
+  annotations: {}
+  automountServiceAccountToken: false
+
+env:
+  PORT: "3001"
+  DB_HOST: postgres
+  DB_PORT: "5432"
+  DB_NAME: userdb
+  NODE_ENV: production
+secretEnv:
+  DB_USER:
+    name: travel-booking-database
+    key: username
+  DB_PASSWORD:
+    name: travel-booking-database
+    key: password
+  JWT_SECRET:
+    name: travel-booking-jwt
+    key: jwt-secret
+envFrom: []
+externalSecrets: []
+
+configMap:
+  enabled: true
+  name: ""
+
+rollingUpdate:
+  maxUnavailable: 0
+  maxSurge: 1
+terminationGracePeriodSeconds: 30
+
+podAnnotations: {}
+podLabels: {}
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 10001
+  runAsGroup: 10001
+  fsGroup: 10001
+securityContext:
+  allowPrivilegeEscalation: false
+  privileged: false
+  capabilities:
+    drop:
+      - ALL
+  readOnlyRootFilesystem: true
+
+startupProbe:
+  httpGet:
+    path: /health
+    port: http
+  failureThreshold: 30
+  periodSeconds: 5
+readinessProbe:
+  httpGet:
+    path: /health
+    port: http
+  initialDelaySeconds: 5
+  periodSeconds: 10
+  timeoutSeconds: 2
+  failureThreshold: 3
+livenessProbe:
+  httpGet:
+    path: /health
+    port: http
+  initialDelaySeconds: 15
+  periodSeconds: 20
+  timeoutSeconds: 2
+  failureThreshold: 3
+
+resources:
+  requests:
+    cpu: 50m
+    memory: 64Mi
+  limits:
+    cpu: 250m
+    memory: 256Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 3
+  targetCPUUtilizationPercentage: 70
+  targetMemoryUtilizationPercentage: null
+  behavior: {}
+
+podDisruptionBudget:
+  enabled: false
+  maxUnavailable: 1
+
+networkPolicy:
+  enabled: true
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: frontend
+      ports:
+        - protocol: TCP
+          port: 3001
+    - from:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: booking-service
+      ports:
+        - protocol: TCP
+          port: 3001
+  egress:
+    - to: []
+      ports:
+        - protocol: TCP
+          port: 5432
+    - to: []
+      ports:
+        - protocol: UDP
+          port: 53
+        - protocol: TCP
+          port: 53
+
+nodeSelector: {}
+affinity: {}
+tolerations: []
+topologySpreadConstraints: []
+volumes: []
+volumeMounts: []

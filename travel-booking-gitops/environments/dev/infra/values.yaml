@@ -1,0 +1,16 @@
+secrets:
+  enabled: true
+  database:
+    username: postgres
+    password: postgres
+  jwt:
+    value: change-me-for-local-kind
+
+postgres:
+  enabled: true
+  storage:
+    size: 2Gi
+    storageClassName: standard
+
+redis:
+  enabled: true

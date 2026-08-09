@@ -3,29 +3,29 @@ services:
   - name: frontend
     path: frontend
     language: nodejs
-    ecrRepo: travel-booking-frontend
+    ecrRepo: prod-travelbooking-frontend
 
   - name: user-service
     path: user-service
     language: golang
-    ecrRepo: travel-booking-user-service
+    ecrRepo: prod-travelbooking-user-service
 
   - name: search-service
     path: search-service
     language: golang
-    ecrRepo: travel-booking-search-service
+    ecrRepo: prod-travelbooking-search-service
 
   - name: booking-service
     path: booking-service
     language: golang
-    ecrRepo: travel-booking-booking-service
+    ecrRepo: prod-travelbooking-booking-service
 
   - name: payment-service
     path: payment-service
     language: golang
-    ecrRepo: travel-booking-payment-service
+    ecrRepo: prod-travelbooking-payment-service
 
   - name: notification-service
     path: notification-service
     language: golang
-    ecrRepo: travel-booking-notification-service
+    ecrRepo: prod-travelbooking-notification-service

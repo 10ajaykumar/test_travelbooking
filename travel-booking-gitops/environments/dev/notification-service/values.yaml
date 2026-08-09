@@ -1,0 +1,17 @@
+replicaCount: 1
+image:
+  repository: travel-booking-notification-service
+  tag: "kind-local"
+env:
+  NODE_ENV: development
+resources:
+  requests:
+    cpu: 25m
+    memory: 64Mi
+  limits:
+    cpu: 200m
+    memory: 256Mi
+autoscaling:
+  enabled: false
+podDisruptionBudget:
+  enabled: false

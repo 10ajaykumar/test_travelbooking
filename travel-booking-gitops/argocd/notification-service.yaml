@@ -1,0 +1,24 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: notification-service
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/10ajaykumar/travel-booking-gitops.git
+    targetRevision: main
+    path: charts/notification-service
+    helm:
+      releaseName: notification-service
+      valueFiles:
+        - ../../environments/prod/notification-service/values.yaml
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: travel-booking-prod
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
